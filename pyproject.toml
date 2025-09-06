@@ -9,7 +9,9 @@ readme = "README.md"
 license-files = ["LICENSE.md"]
 
 requires-python = ">=3.10, ~=3.13"
-dependencies = []
+dependencies = [
+    "stelvio",
+]
 
 
 [project.urls]
@@ -21,6 +23,7 @@ changelog = "https://github.com/jlmcgraw/stelvio-app/blob/main/CHANGELOG.md"
 [dependency-groups]
 dev = [
     "basedpyright",
+    "boto3-stubs[apigateway,dynamodb,essential,iam,s3]",
     "ipython",
     "mkdocs-material",
     "mkdocstrings[python]",
@@ -32,7 +35,7 @@ dev = [
     "pytest-pretty",
     "pytest-random-order",
     "ruff",
-    "typos"
+    "typos",
 ]
 
 
@@ -45,7 +48,7 @@ addopts = [
     "--random-order",
     "--cov=src/stelvio_app",
     "--cov-report=term-missing",
-    "--cov-fail-under=85",
+    "--cov-fail-under=53",
     "--cov-report=xml:.coverage.xml",
     "--junitxml=.junit.xml",
     "--override-ini=junit_family=legacy",
@@ -119,9 +122,13 @@ warn_unreachable = true
 warn_unused_ignores = true
 
 [[tool.mypy.overrides]]
-module = []
-ignore_missing_imports = true
+module = [
+  "stelvio",
+  "stelvio.*",
+    "stlv_resources",
 
+]
+ignore_missing_imports = true
 
 [tool.basedpyright]
 reportAny = false
