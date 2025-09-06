@@ -1,3 +1,5 @@
+# pyright: reportMissingTypeStubs=false, reportUnusedParameter=false
+
 from typing import TYPE_CHECKING, Callable, cast
 
 from stelvio.app import StelvioApp
@@ -5,11 +7,16 @@ from stelvio.aws.api_gateway import Api
 from stelvio.aws.dynamo_db import DynamoTable, FieldType
 
 if TYPE_CHECKING:
-    class AwsConfig:
-        def __init__(self, *, region: str, profile: str | None) -> None: ...
+    from dataclasses import dataclass
 
-    class StelvioAppConfig:
-        def __init__(self, *, aws: AwsConfig) -> None: ...
+    @dataclass
+    class AwsConfig:  # pragma: no cover - used for type checking only
+        region: str
+        profile: str | None
+
+    @dataclass
+    class StelvioAppConfig:  # pragma: no cover - used for type checking only
+        aws: AwsConfig
 else:
     from stelvio.config import AwsConfig, StelvioAppConfig
 
