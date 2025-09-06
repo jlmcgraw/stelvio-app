@@ -8,11 +8,17 @@ from typing import Final
 class TodosResource:
     @cached_property
     def table_arn(self) -> str:
-        return os.getenv("STLV_TODOS_TABLE_ARN")
+        value = os.getenv("STLV_TODOS_TABLE_ARN")
+        if value is None:
+            raise RuntimeError("STLV_TODOS_TABLE_ARN environment variable is not set")
+        return value
 
     @cached_property
     def table_name(self) -> str:
-        return os.getenv("STLV_TODOS_TABLE_NAME")
+        value = os.getenv("STLV_TODOS_TABLE_NAME")
+        if value is None:
+            raise RuntimeError("STLV_TODOS_TABLE_NAME environment variable is not set")
+        return value
 
 
 @dataclass(frozen=True)

@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from typing import Any, Dict
 
 import boto3
 from boto3.dynamodb.conditions import Key
@@ -9,7 +10,7 @@ dynamodb = boto3.resource("dynamodb")
 table = dynamodb.Table(Resources.todos.table_name)
 
 
-def post(event, context):
+def post(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     # Parse the request body
     body = json.loads(event.get("body", "{}"))
 
@@ -25,7 +26,7 @@ def post(event, context):
     return {"statusCode": 201, "body": json.dumps(item)}
 
 
-def get(event, context):
+def get(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     # Get username from query parameters
     username = event.get("pathParameters", {}).get("username")
 

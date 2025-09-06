@@ -1,12 +1,26 @@
+from typing import TYPE_CHECKING, Callable, cast
+
 from stelvio.app import StelvioApp
 from stelvio.aws.api_gateway import Api
 from stelvio.aws.dynamo_db import DynamoTable, FieldType
-from stelvio.config import AwsConfig, StelvioAppConfig
+
+if TYPE_CHECKING:
+    class AwsConfig:
+        def __init__(self, *, region: str, profile: str | None) -> None: ...
+
+    class StelvioAppConfig:
+        def __init__(self, *, aws: AwsConfig) -> None: ...
+else:
+    from stelvio.config import AwsConfig, StelvioAppConfig
 
 app = StelvioApp("stelvio-app")
 
 
-@app.config
+ConfigFunc = Callable[[str], StelvioAppConfig]
+config = cast(Callable[[ConfigFunc], ConfigFunc], app.config)
+
+
+@config
 def configuration(env: str) -> StelvioAppConfig:
     return StelvioAppConfig(
         aws=AwsConfig(
@@ -16,7 +30,11 @@ def configuration(env: str) -> StelvioAppConfig:
     )
 
 
-@app.run
+RunFunc = Callable[[], None]
+run_decorator = cast(Callable[[RunFunc], RunFunc], app.run)
+
+
+@run_decorator
 def run() -> None:
     table = DynamoTable(
         name="todos",
